@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,7 @@ public class BaiduMapAddress extends Activity {
 	private String latlng;	
 	private Handler mHandler;
 	protected static final int REFRESH_DATA = 0x00000001;
+	private Dialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class BaiduMapAddress extends Activity {
 			sb.append("&output=json");
 			sb.append("&ak=SikhKA0Iu6UOLT64BZHIKB9CHPP5fbu2");
 			mapAddressUrl = sb.toString();
+//			dialog = ProgressDialog.show(BaiduMapAddress.this, null, getString(R.string.loading_wait),true);
 			storeRegIdinServerread();
 			
 		} catch (UnsupportedEncodingException e) {
@@ -144,8 +147,7 @@ public class BaiduMapAddress extends Activity {
 								
 								// location to String
 								latlng = obj.get("lat")+","+obj.get("lng");
-								Log.e("location.String", latlng);
-								
+
 								tvLatLng.setText(latlng);
 							}else{
 								tvLatLng.setText(getString(R.string.no_results));
@@ -157,9 +159,10 @@ public class BaiduMapAddress extends Activity {
 					}
 					break;
 				}
+//				dialog.dismiss();
 			}
 		};
-
+		
 		Thread t = new Thread(new sendPostRunnable());
 		t.start();
 	}
@@ -184,7 +187,7 @@ public class BaiduMapAddress extends Activity {
 		 */
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-		// params.add(new BasicNameValuePair("data", strTxt));
+		// params.add(new BasicNameValuePair("data", strTxt));        
 
 		try {
 			/* 發出HTTP request */
